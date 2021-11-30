@@ -21,7 +21,7 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token")) {
       window.location.assign("/dashboard");
     }
   }, []);
@@ -66,8 +66,8 @@ export default function Login() {
       },
     };
 
-    localStorage.setItem("token", JSON.stringify(user));
-    localStorage.setItem("googleLogin", true);
+    sessionStorage.setItem("token", JSON.stringify(user));
+    sessionStorage.setItem("googleLogin", true);
 
     window.location.assign("/dashboard");
   };

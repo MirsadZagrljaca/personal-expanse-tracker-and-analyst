@@ -25,11 +25,11 @@ export default function TransactionsDaily() {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
@@ -53,6 +53,7 @@ export default function TransactionsDaily() {
             const currentDay = currentDate.getDate().toString();
             const currentMonth = (currentDate.getMonth() + 1).toString();
             const currentYear = currentDate.getFullYear().toString();
+            const currentTime = currentDate.getHours();
 
             if (
               year === currentYear &&
@@ -60,6 +61,24 @@ export default function TransactionsDaily() {
               day === currentDay
             ) {
               response[i] = value;
+
+              let hourDiff =
+                currentTime -
+                value.created
+                  .split("-")[2]
+                  .split("T")[1]
+                  .split(".")[0]
+                  .split(":")[0];
+
+              let msg = "";
+
+              if (hourDiff <= 1) {
+                msg = `less then ${hourDiff} hour ago`;
+              } else {
+                msg = `about ${hourDiff} hours ago`;
+              }
+
+              response[i].created = msg;
               i++;
             }
           }

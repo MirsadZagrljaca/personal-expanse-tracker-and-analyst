@@ -27,11 +27,11 @@ export default function EditTransaction() {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
@@ -51,10 +51,6 @@ export default function EditTransaction() {
       }
     });
   }, [transactionId]);
-
-  useEffect(() => {
-      console.log(values);
-  }, [values])
 
   const clickHandler = (e) => {
     const transaction = {

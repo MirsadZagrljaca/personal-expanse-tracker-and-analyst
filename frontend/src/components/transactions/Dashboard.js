@@ -22,11 +22,11 @@ export default function Dashboard() {
   const [exp, setExp] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
@@ -109,67 +109,85 @@ export default function Dashboard() {
   }, [data]);
 
   const changeHandler = (e) => {
-    if (e.target.value === "BAM") {
-      if (currency === "BAM") {
-        return;
-      } else if (currency === "$") {
-        let tempTotal = total * 1.69;
-        let tempInc = totalIncome * 1.69;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 1.69;
-        setTotalExpense(tempExp);
-        setTotal(tempTotal);
-        setCurrency("BAM");
-      } else if (currency === "€") {
-        let tempTotal = total * 1.96;
-        setTotal(tempTotal);
-        let tempInc = totalIncome * 1.96;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 1.96;
-        setTotalExpense(tempExp);
-        setCurrency("BAM");
+    let tempData = data;
+
+    data.map((value, index) => {
+      if (e.target.value === "BAM") {
+        if (currency === "BAM") {
+          return;
+        } else if (currency === "$") {
+          let tempTotal = total * 1.69;
+          let tempInc = totalIncome * 1.69;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 1.69;
+          setTotalExpense(tempExp);
+          setTotal(tempTotal);
+          setCurrency("BAM");
+          tempData[index].amount *= 1.69;
+          tempData[index].currency = "BAM";
+        } else if (currency === "€") {
+          let tempTotal = total * 1.96;
+          setTotal(tempTotal);
+          let tempInc = totalIncome * 1.96;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 1.96;
+          setTotalExpense(tempExp);
+          setCurrency("BAM");
+          tempData[index].amount *= 1.96;
+          tempData[index].currency = "BAM";
+        }
+      } else if (e.target.value === "$") {
+        if (currency === "BAM") {
+          let tempTotal = total * 0.59;
+          setTotal(tempTotal);
+          let tempInc = totalIncome * 0.59;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 0.59;
+          setTotalExpense(tempExp);
+          setCurrency("$");
+          tempData[index].amount *= 0.59;
+          tempData[index].currency = "$";
+        } else if (currency === "$") {
+          return;
+        } else if (currency === "€") {
+          let tempTotal = total * 1.16;
+          setTotal(tempTotal);
+          let tempInc = totalIncome * 1.16;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 1.16;
+          setTotalExpense(tempExp);
+          setCurrency("$");
+          tempData[index].amount *= 1.16;
+          tempData[index].currency = "$";
+        }
+      } else if (e.target.value === "€") {
+        if (currency === "BAM") {
+          let tempTotal = total * 0.51;
+          setTotal(tempTotal);
+          let tempInc = totalIncome * 0.51;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 0.51;
+          setTotalExpense(tempExp);
+          setCurrency("€");
+          tempData[index].amount *= 0.51;
+          tempData[index].currency = "€";
+        } else if (currency === "$") {
+          let tempTotal = total * 0.86;
+          setTotal(tempTotal);
+          let tempInc = totalIncome * 0.86;
+          setTotalIncome(tempInc);
+          let tempExp = totalExpense * 0.86;
+          setTotalExpense(tempExp);
+          setCurrency("€");
+          tempData[index].amount *= 0.86;
+          tempData[index].currency = "€";
+        } else if (currency === "€") {
+          return;
+        }
       }
-    } else if (e.target.value === "$") {
-      if (currency === "BAM") {
-        let tempTotal = total * 0.59;
-        setTotal(tempTotal);
-        let tempInc = totalIncome * 0.59;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 0.59;
-        setTotalExpense(tempExp);
-        setCurrency("$");
-      } else if (currency === "$") {
-        return;
-      } else if (currency === "€") {
-        let tempTotal = total * 1.16;
-        setTotal(tempTotal);
-        let tempInc = totalIncome * 1.16;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 1.16;
-        setTotalExpense(tempExp);
-        setCurrency("$");
-      }
-    } else if (e.target.value === "€") {
-      if (currency === "BAM") {
-        let tempTotal = total * 0.51;
-        setTotal(tempTotal);
-        let tempInc = totalIncome * 0.51;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 0.51;
-        setTotalExpense(tempExp);
-        setCurrency("€");
-      } else if (currency === "$") {
-        let tempTotal = total * 0.86;
-        setTotal(tempTotal);
-        let tempInc = totalIncome * 0.86;
-        setTotalIncome(tempInc);
-        let tempExp = totalExpense * 0.86;
-        setTotalExpense(tempExp);
-        setCurrency("€");
-      } else if (currency === "€") {
-        return;
-      }
-    }
+    });
+
+    setData(tempData);
   };
 
   const chartData = [

@@ -2,6 +2,7 @@ import User from "../models/user.models";
 import _, { join } from "lodash";
 import errorHandler from "../helpers/dbErrorHandler";
 import crypto from "crypto";
+import Transaction from "../models/transaction.model";
 
 const encryptPassword = (password, salt) => {
   try {

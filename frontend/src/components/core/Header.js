@@ -24,8 +24,8 @@ export default function Header({ name, id }) {
     "(" +
     today.getDate() +
     "." +
-    today.getMonth() +
-    ")";
+    (today.getMonth() + 1) +
+    ".)";
 
   const logout = (e) => {
     const user = {
@@ -34,22 +34,22 @@ export default function Header({ name, id }) {
     };
 
     signout(user);
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
 
-    if (localStorage.getItem("googleLogin")) {
-      localStorage.removeItem("googleLogin");
+    if (sessionStorage.getItem("googleLogin")) {
+      sessionStorage.removeItem("googleLogin");
     }
 
     window.location.assign("/");
   };
 
   useEffect(() => {
-    if (localStorage.getItem("googleLogin")) {
+    if (sessionStorage.getItem("googleLogin")) {
       let user = JSON.parse(localStorage.getItem("token"));
       return setFirstName(user.user.firstName);
     }
 
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const tempUser = token.user;
 
     setFirstName(tempUser.firstName);

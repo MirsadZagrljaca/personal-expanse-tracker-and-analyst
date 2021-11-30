@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../core/Header";
 import AddMenu from "./AddMenu";
 import { Button, Alert } from "react-bootstrap";
-import { create } from "./api-transaction";
+import { create, list } from "./api-transaction";
 import { Navigate } from "react-router";
 
 /* eslint-disable */
@@ -20,25 +20,39 @@ export default function AddIncome() {
     error: "",
   });
 
+  const [data, setData] = useState([]);
+
   const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
     setValues({ ...values, objectId: tempUser });
-  }, []);
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
+    list().then((values, error) => {
+      if (error) {
+        setError(error);
+      } else {
+        let response = [];
+        let i = 0;
+        values.map((value, index) => {
+          if (value.objectId._id == tempUser._id) {
+            response[i] = value;
+            i++;
+          }
+        });
+        setData(response);
+      }
+    });
+  }, []);
 
   const clickHandler = (e) => {
     const transaction = {
@@ -48,6 +62,21 @@ export default function AddIncome() {
       type: values.type || undefined,
       objectId: values.objectId || undefined,
     };
+
+    let same = false;
+
+    data.map((v, i) => {
+      if (v.title === transaction.title) {
+        same = true;
+        setValues({
+          ...values,
+          error: "You've already used that transactions name!",
+          open: false,
+        });
+      }
+    });
+
+    if (same) return;
 
     create(transaction).then((data) => {
       if (data.error) {

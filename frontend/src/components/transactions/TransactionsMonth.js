@@ -25,11 +25,11 @@ export default function TransactionsMonth() {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
@@ -51,8 +51,37 @@ export default function TransactionsMonth() {
               const currentMonth = (currentDate.getMonth() + 1).toString();
               const currentYear = currentDate.getFullYear().toString();
 
-              if (year === currentYear && month === currentMonth) {
+              if (year === currentYear) {
+                let monthShow = "";
+
+                if (month === "1") {
+                  monthShow = "January";
+                } else if (month === "2") {
+                  monthShow = "February";
+                } else if (month === "3") {
+                  monthShow = "March";
+                } else if (month === "4") {
+                  monthShow = "April";
+                } else if (month === "5") {
+                  monthShow = "May";
+                } else if (month === "6") {
+                  monthShow = "June";
+                } else if (month === "7") {
+                  monthShow = "July";
+                } else if (month === "8") {
+                  monthShow = "August";
+                } else if (month === "9") {
+                  monthShow = "September";
+                } else if (month === "10") {
+                  monthShow = "October";
+                } else if (month === "11") {
+                  monthShow = "November";
+                } else if (month === "12") {
+                  monthShow = "December";
+                }
+
                 response[i] = value;
+                response[i].created = monthShow;
                 i++;
               }
             }

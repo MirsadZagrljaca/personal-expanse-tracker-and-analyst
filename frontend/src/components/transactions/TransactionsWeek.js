@@ -25,11 +25,11 @@ export default function TransactionsWeek() {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    let temp = JSON.parse(localStorage.getItem("token"));
+    let temp = JSON.parse(sessionStorage.getItem("token"));
     let tempUser = temp.user;
 
     setUser(tempUser);
@@ -62,7 +62,26 @@ export default function TransactionsWeek() {
                 month === currentMonth &&
                 year === currentYear
               ) {
+                let day = "";
+
+                if (value.date === "1") {
+                  day = "Monday";
+                } else if (value.date === "2") {
+                  day = "Tuesday";
+                } else if (value.date === "3") {
+                  day = "Wednesday";
+                } else if (value.date === "4") {
+                  day = "Thursday";
+                } else if (value.date === "5") {
+                  day = "Friday";
+                } else if (value.date === "6") {
+                  day = "Saturday";
+                } else if (value.date === "7") {
+                  day = "Sunday";
+                }
+
                 response[i] = value;
+                response[i].created = day;
                 i++;
               }
             }

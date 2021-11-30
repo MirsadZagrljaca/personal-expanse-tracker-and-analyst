@@ -29,11 +29,11 @@ export default function EditPassword() {
   const jwt = authHelpers.isAuthenticated();
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    if (localStorage.getItem("googleLogin")) {
+    if (sessionStorage.getItem("googleLogin")) {
       return setValues({
         ...values,
         error: "We can't edit your account since you logged with Google",

@@ -24,11 +24,11 @@ export default function StatisticsWeek() {
   const [chart, setChart] = useState("pie");
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return <Navigate to="/" />;
     }
 
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const tempUser = token.user;
     setUser(tempUser);
 
@@ -56,8 +56,7 @@ export default function StatisticsWeek() {
               const weekChecker = currentDay - day;
 
               if (
-                weekChecker < 8 &&
-                month === currentMonth &&
+                month===currentMonth &&
                 year === currentYear
               ) {
                 response[i] = value;
@@ -230,7 +229,7 @@ export default function StatisticsWeek() {
           </div>
 
           <div className="stat-right">
-            {mon.expense === 0 && mon.expense === 0 ? (
+            {mon.income === 0 && mon.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
@@ -238,15 +237,15 @@ export default function StatisticsWeek() {
                 <span className="all-expense">-{mon.expense}</span>
               </p>
             )}
-            {tue.expense === 0 && tue.expense === 0 ? (
+            {tue.income === 0 && tue.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                Tue <span className="all-income">+{mon.income} </span>
-                <span className="all-expense">-{mon.expense}</span>
+                Tue <span className="all-income">+{tue.income} </span>
+                <span className="all-expense">-{tue.expense}</span>
               </p>
             )}
-            {wen.expense === 0 && wen.expense === 0 ? (
+            {wen.income === 0 && wen.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
@@ -254,7 +253,7 @@ export default function StatisticsWeek() {
                 <span className="all-expense">-{wen.expense}</span>
               </p>
             )}
-            {thu.expense === 0 && thu.expense === 0 ? (
+            {thu.income === 0 && thu.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
@@ -262,7 +261,7 @@ export default function StatisticsWeek() {
                 <span className="all-expense">-{thu.expense}</span>
               </p>
             )}
-            {fri.expense === 0 && fri.expense === 0 ? (
+            {fri.income === 0 && fri.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
@@ -270,7 +269,7 @@ export default function StatisticsWeek() {
                 <span className="all-expense">-{fri.expense}</span>
               </p>
             )}
-            {sat.expense === 0 && sat.expense === 0 ? (
+            {sat.income === 0 && sat.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
@@ -278,7 +277,7 @@ export default function StatisticsWeek() {
                 <span className="all-expense">-{sat.expense}</span>
               </p>
             )}
-            {sun.expense === 0 && sun.expense === 0 ? (
+            {sun.income === 0 && sun.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">

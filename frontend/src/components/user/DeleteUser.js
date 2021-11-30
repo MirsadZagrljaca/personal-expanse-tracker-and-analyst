@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { read, remove } from "./api-user";
+import { list, remove as removeTrans } from "../transactions/api-transaction";
 import { Navigate } from "react-router";
 import authHelpers from "./auth-helpers";
 import {
@@ -32,18 +33,33 @@ export default function DeleteUser() {
   const [isOpen, setIsOpen] = useState(false);
   const { userId } = useParams();
   const jwt = authHelpers.isAuthenticated();
+  const [transactionsIds, setTransactionsIds] = useState([]);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    if (localStorage.getItem("googleLogin")) {
+    if (sessionStorage.getItem("googleLogin")) {
       return setValues({
         ...values,
         error: "We can't delete your account since you logged with Google",
       });
     }
+
+    let tempTransIds = [];
+    let j = 0;
+
+    list().then((response) => {
+      response.map((v, i) => {
+        if (v.objectId._id === userId) {
+          tempTransIds[j] = v._id;
+          j++;
+        }
+      });
+    });
+
+    setTransactionsIds(tempTransIds);
 
     const abortControler = new AbortController();
     const signal = abortControler.signal;
@@ -96,6 +112,15 @@ export default function DeleteUser() {
       if (data && data.error) {
         console.log(data.error);
       } else {
+        transactionsIds.map((id, i) => {
+          removeTrans({ transactionId: id }).then((data) => {
+            if (data && data.error) {
+              console.log(data.error);
+            } else {
+              console.log("transaction deleted");
+            }
+          });
+        });
         authHelpers.clearToken(() => console.log("deleted"));
         setValues({ ...values, redirect: true });
       }

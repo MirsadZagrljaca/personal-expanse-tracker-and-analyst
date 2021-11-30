@@ -28,11 +28,11 @@ export default function Edit({ match }) {
   const { userId } = useParams();
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return window.location.assign("/");
     }
 
-    if (localStorage.getItem("googleLogin")) {
+    if (sessionStorage.getItem("googleLogin")) {
       return setValues({
         ...values,
         error: "We can't edit your account since you logged with Google",
@@ -78,6 +78,12 @@ export default function Edit({ match }) {
         setValues({ ...values, error: data.error });
       } else {
         setValues({ ...values, redirectToDashboard: true });
+        let token = JSON.parse(sessionStorage.getItem("token"));
+        token.user.firstName = values.firstName;
+        token.user.lastName = values.lastName;
+        token.user.nickname = values.nickname;
+        token.user.email = values.email;
+        sessionStorage.setItem("token", JSON.stringify(token));
       }
     });
   };

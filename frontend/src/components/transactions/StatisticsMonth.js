@@ -6,34 +6,30 @@ import { list } from "./api-transaction";
 import { Chart } from "react-google-charts";
 import { Button } from "react-bootstrap";
 
+// StatisticsYear
+
 export default function StatisticsMonth() {
   const [user, setUser] = useState({
     _id: "",
     firstName: "",
   });
   const [data, setData] = useState([]);
-  const [jan, setJan] = useState({ income: 0, expense: 0 });
-  const [feb, setFeb] = useState({ income: 0, expense: 0 });
-  const [mar, setMar] = useState({ income: 0, expense: 0 });
-  const [apr, setApr] = useState({ income: 0, expense: 0 });
-  const [may, setMay] = useState({ income: 0, expense: 0 });
-  const [jun, setJun] = useState({ income: 0, expense: 0 });
-  const [jul, setJul] = useState({ income: 0, expense: 0 });
-  const [aug, setAug] = useState({ income: 0, expense: 0 });
-  const [sep, setSep] = useState({ income: 0, expense: 0 });
-  const [oct, setOct] = useState({ income: 0, expense: 0 });
-  const [nov, setNov] = useState({ income: 0, expense: 0 });
-  const [dec, setDec] = useState({ income: 0, expense: 0 });
+  const [month, setMonth] = useState("");
+  const [firstW, setFirstW] = useState({ income: 0, expense: 0 });
+  const [secondW, setSecondW] = useState({ income: 0, expense: 0 });
+  const [thirdW, setThirdW] = useState({ income: 0, expense: 0 });
+  const [fourW, setFourW] = useState({ income: 0, expense: 0 });
+  const [fiveW, setFiveW] = useState({ income: 0, expense: 0 });
   const [chart, setChart] = useState("pie");
 
   /* eslint-disable */
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!sessionStorage.getItem("token")) {
       return <Navigate to="/" />;
     }
 
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(sessionStorage.getItem("token"));
     const tempUser = token.user;
     setUser(tempUser);
 
@@ -60,11 +56,32 @@ export default function StatisticsMonth() {
 
               const weekChecker = currentDay - day;
 
-              if (
-                weekChecker < 8 &&
-                month === currentMonth &&
-                year === currentYear
-              ) {
+              if (month === currentMonth && year === currentYear) {
+                if (month === "1") {
+                  setMonth("January");
+                } else if (month === "2") {
+                  setMonth("February");
+                } else if (month === "3") {
+                  setMonth("March");
+                } else if (month === "4") {
+                  setMonth("April");
+                } else if (month === "5") {
+                  setMonth("May");
+                } else if (month === "6") {
+                  setMonth("June");
+                } else if (month === "7") {
+                  setMonth("July");
+                } else if (month === "8") {
+                  setMonth("August");
+                } else if (month === "9") {
+                  setMonth("September");
+                } else if (month === "10") {
+                  setMonth("October");
+                } else if (month === "11") {
+                  setMonth("November");
+                } else if (month === "12") {
+                  setMonth("December");
+                }
                 response[i] = value;
                 i++;
               }
@@ -79,122 +96,66 @@ export default function StatisticsMonth() {
   useEffect(() => {
     if (data.length === 0) return;
 
-    let tempJanInc = 0;
-    let tempJanExp = 0;
-    let tempFebInc = 0;
-    let tempFebExp = 0;
-    let tempMarInc = 0;
-    let tempMarExp = 0;
-    let tempAprInc = 0;
-    let tempAprExp = 0;
-    let tempMayInc = 0;
-    let tempMayExp = 0;
-    let tempJunInc = 0;
-    let tempJunExp = 0;
-    let tempJulInc = 0;
-    let tempJulExp = 0;
-    let tempAugInc = 0;
-    let tempAugExp = 0;
-    let tempSepInc = 0;
-    let tempSepExp = 0;
-    let tempOctInc = 0;
-    let tempOctExp = 0;
-    let tempNovInc = 0;
-    let tempNovExp = 0;
-    let tempDecInc = 0;
-    let tempDecExp = 0;
+    let tempFWI = 0;
+    let tempFWE = 0;
+    let tempSWI = 0;
+    let tempSWE = 0;
+    let tempTI = 0;
+    let tempTE = 0;
+    let tempFI = 0;
+    let tempFE = 0;
+    let tempFiveInc = 0;
+    let tempFiveExp = 0;
 
     data.map((value, index) => {
-      const temp = value.created.split("-");
-      const month = temp[1];
+      const date = value.created.split("-");
+      const temp = date[2];
+      const tempSplit = temp.split("T");
+      const day = tempSplit[0];
 
-      if (month === "1") {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate().toString();
+
+      const weekChecker = parseInt(currentDay - day);
+
+      if (weekChecker < 8) {
         if (value.type === "income") {
-          tempJanInc += value.amount;
+          tempFWI += value.amount;
         } else {
-          tempJanExp += value.amount;
+          tempFWE += value.amount;
         }
-      } else if (month === "2") {
+      } else if (weekChecker < 15) {
         if (value.type === "income") {
-          tempFebInc += value.amount;
+          tempSWI += value.amount;
         } else {
-          tempFebExp += value.amount;
+          tempSWE += value.amount;
         }
-      } else if (month === "3") {
+      } else if (weekChecker < 22) {
         if (value.type === "income") {
-          tempMarInc += value.amount;
+          tempTI += value.amount;
         } else {
-          tempMarExp += value.amount;
+          tempTE += value.amount;
         }
-      } else if (month === "4") {
+      } else if (weekChecker < 29) {
         if (value.type === "income") {
-          tempAprInc += value.amount;
+          tempFI += value.amount;
         } else {
-          tempAprExp += value.amount;
+          tempFI += value.amount;
         }
-      } else if (month === "5") {
+      } else {
         if (value.type === "income") {
-          tempMayInc += value.amount;
+          tempFiveInc += value.amount;
         } else {
-          tempMayExp += value.amount;
-        }
-      } else if (month === "6") {
-        if (value.type === "income") {
-          tempJunInc += value.amount;
-        } else {
-          tempJunExp += value.amount;
-        }
-      } else if (month === "7") {
-        if (value.type === "income") {
-          tempJulInc += value.amount;
-        } else {
-          tempJulExp += value.amount;
-        }
-      } else if (month === "8") {
-        if (value.type === "income") {
-          tempAugInc += value.amount;
-        } else {
-          tempAugExp += value.amount;
-        }
-      } else if (month === "9") {
-        if (value.type === "income") {
-          tempSepInc += value.amount;
-        } else {
-          tempSepExp += value.amount;
-        }
-      } else if (month === "10") {
-        if (value.type === "income") {
-          tempOctInc += value.amount;
-        } else {
-          tempOctExp += value.amount;
-        }
-      } else if (month === "11") {
-        if (value.type === "income") {
-          tempNovInc += value.amount;
-        } else {
-          tempNovExp += value.amount;
-        }
-      } else if (month === "12") {
-        if (value.type === "income") {
-          tempDecInc += value.amount;
-        } else {
-          tempDecExp += value.amount;
+          tempFiveExp += value.amount;
         }
       }
     });
 
-    setJan({ income: tempJanInc, expense: tempJanExp });
-    setFeb({ income: tempFebInc, expense: tempFebExp });
-    setMar({ income: tempMarInc, expense: tempMarExp });
-    setApr({ income: tempAprInc, expense: tempAprExp });
-    setMay({ income: tempMayInc, expense: tempMayExp });
-    setJun({ income: tempJunInc, expense: tempJunExp });
-    setJul({ income: tempJulInc, expense: tempJulExp });
-    setAug({ income: tempAugInc, expense: tempAugExp });
-    setSep({ income: tempSepExp, expense: tempSepExp });
-    setOct({ income: tempOctInc, expense: tempOctExp });
-    setNov({ income: tempNovInc, expense: tempNovExp });
-    setDec({ income: tempDecInc, expense: tempDecExp });
+    setFirstW({ income: tempFWI, expense: tempFWE });
+    setSecondW({ income: tempSWI, expense: tempSWE });
+    setThirdW({ income: tempTI, expense: tempTE });
+    setFourW({ income: tempFI, expense: tempFE });
+    setFiveW({ income: tempFiveInc, expense: tempFiveExp });
   }, [data]);
 
   return (
@@ -221,32 +182,20 @@ export default function StatisticsMonth() {
                 chartType="PieChart"
                 data={[
                   ["Transactions", "Per Month"],
-                  ["Jan Inc", jan.income],
-                  ["Jan Exp", jan.expense],
-                  ["Feb Inc", feb.income],
-                  ["Feb Exp", feb.expense],
-                  ["Mar Inc", mar.income],
-                  ["Mar Exp", mar.expense],
-                  ["Apr Inc", apr.income],
-                  ["Apr Exp", apr.expense],
-                  ["May Inc", may.income],
-                  ["May Exp", may.expense],
-                  ["Jun Inc", jun.income],
-                  ["Jun Exp", jun.expense],
-                  ["Jul Inc", jul.income],
-                  ["Jul Exp", jul.expense],
-                  ["Aug Inc", aug.income],
-                  ["Aug Exp", aug.expense],
-                  ["Sep Inc", sep.income],
-                  ["Sep Exp", sep.expense],
-                  ["Oct Inc", oct.income],
-                  ["Oct Exp", oct.expense],
-                  ["Nov Inc", nov.income],
-                  ["Nov Exp", nov.expense],
-                  ["Dec Inc", dec.income],
-                  ["Dec Exp", dec.expense],
+                  ["First Week Inc", firstW.income],
+                  ["First Week Exp", firstW.expense],
+                  ["Second Week Inc", secondW.income],
+                  ["Second Week Exp", secondW.expense],
+                  ["Third Week Inc", thirdW.income],
+                  ["Third Week Exp", thirdW.expense],
+                  ["Fourth Week Inc", fourW.income],
+                  ["Fourth Week Exp", fourW.expense],
+                  ["Fiveth Week Inc", fiveW.income],
+                  ["Fiveth Week Exp", fiveW.expense],
                 ]}
-                options={{ title: "Transactions For Last Week" }}
+                options={{
+                  title: "Transactions For Last Month Grouped by Weeks",
+                }}
                 width={"500px"}
                 height={"500px"}
               />
@@ -259,20 +208,15 @@ export default function StatisticsMonth() {
                 height={"500px"}
                 data={[
                   ["Transactions", "Income", "Expense"],
-                  ["Jan", jan.income, jan.expense],
-                  ["Feb", feb.income, feb.expense],
-                  ["Mar", mar.income, mar.expense],
-                  ["Apr", apr.income, apr.expense],
-                  ["May", may.income, may.expense],
-                  ["Jun", jun.income, jun.expense],
-                  ["Jul", jul.income, jul.expense],
-                  ["Aug", aug.income, aug.expense],
-                  ["Sep", sep.income, sep.expense],
-                  ["Oct", oct.income, oct.expense],
-                  ["Nov", nov.income, nov.expense],
-                  ["Dec", dec.income, dec.expense],
+                  ["First Week", firstW.income, firstW.expense],
+                  ["Second Week", secondW.income, secondW.expense],
+                  ["Third Week", thirdW.income, thirdW.expense],
+                  ["Fourth Week", fourW.income, fourW.expense],
+                  ["Fiveth Week", fiveW.income, fiveW.expense],
                 ]}
-                options={{ title: "Transactions Per Month" }}
+                options={{
+                  title: "Transactions For Last Month Grouped by Weeks",
+                }}
               />
             )}
 
@@ -283,119 +227,63 @@ export default function StatisticsMonth() {
                 height={"500px"}
                 data={[
                   ["Transactions", "Income", "Expense"],
-                  ["Jan", jan.income, jan.expense],
-                  ["Feb", feb.income, feb.expense],
-                  ["Mar", mar.income, mar.expense],
-                  ["Apr", apr.income, apr.expense],
-                  ["May", may.income, may.expense],
-                  ["Jun", jun.income, jun.expense],
-                  ["Jul", jul.income, jul.expense],
-                  ["Aug", aug.income, aug.expense],
-                  ["Sep", sep.income, sep.expense],
-                  ["Oct", oct.income, oct.expense],
-                  ["Nov", nov.income, nov.expense],
-                  ["Dec", dec.income, dec.expense],
+                  ["First Week", firstW.income, firstW.expense],
+                  ["Second Week", secondW.income, secondW.expense],
+                  ["Third Week", thirdW.income, thirdW.expense],
+                  ["Fourth Week", fourW.income, fourW.expense],
+                  ["Fiveth Week", fiveW.income, fiveW.expense],
                 ]}
-                options={{ title: "Transactions Per Month" }}
+                options={{
+                  title: "Transactions For Last Month Grouped by Weeks",
+                }}
               />
             )}
           </div>
 
           <div className="stat-right">
-            {jan.expense === 0 && jan.expense === 0 ? (
+            {firstW.income === 0 && firstW.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                Jan <span className="all-income">+{jan.income} </span>
-                <span className="all-expense">-{jan.expense}</span>
+                First Week {month}{" "}
+                <span className="all-income">+{firstW.income} </span>
+                <span className="all-expense">-{firstW.expense}</span>
               </p>
             )}
-            {feb.expense === 0 && feb.expense === 0 ? (
+            {secondW.income === 0 && secondW.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                Feb <span className="all-income">+{feb.income} </span>
-                <span className="all-expense">-{feb.expense}</span>
+                Second Week {month}{" "}
+                <span className="all-income">+{secondW.income} </span>
+                <span className="all-expense">-{secondW.expense}</span>
               </p>
             )}
-            {mar.expense === 0 && mar.expense === 0 ? (
+            {thirdW.income === 0 && thirdW.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                Mar <span className="all-income">+{mar.income} </span>
-                <span className="all-expense">-{mar.expense}</span>
+                Third Week {month}{" "}
+                <span className="all-income">+{thirdW.income} </span>
+                <span className="all-expense">-{thirdW.expense}</span>
               </p>
             )}
-            {apr.expense === 0 && apr.expense === 0 ? (
+            {fourW.income === 0 && fourW.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                Apr <span className="all-income">+{apr.income} </span>
-                <span className="all-expense">-{apr.expense}</span>
+                Fourth Week {month}{" "}
+                <span className="all-income">+{fourW.income} </span>
+                <span className="all-expense">-{fourW.expense}</span>
               </p>
             )}
-            {may.expense === 0 && may.expense === 0 ? (
+            {fiveW.income === 0 && fiveW.expense === 0 ? (
               <div></div>
             ) : (
               <p className="stat">
-                May <span className="all-income">+{may.income} </span>
-                <span className="all-expense">-{may.expense}</span>
-              </p>
-            )}
-            {jun.expense === 0 && jun.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Jun <span className="all-income">+{jun.income} </span>
-                <span className="all-expense">-{jun.expense}</span>
-              </p>
-            )}
-            {jul.expense === 0 && jul.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Jul <span className="all-income">+{jul.income} </span>
-                <span className="all-expense">-{jul.expense}</span>
-              </p>
-            )}
-            {aug.expense === 0 && aug.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Aug <span className="all-income">+{aug.income} </span>
-                <span className="all-expense">-{aug.expense}</span>
-              </p>
-            )}
-            {sep.expense === 0 && sep.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Sep <span className="all-income">+{sep.income} </span>
-                <span className="all-expense">-{sep.expense}</span>
-              </p>
-            )}
-            {oct.expense === 0 && oct.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Oct <span className="all-income">+{oct.income} </span>
-                <span className="all-expense">-{oct.expense}</span>
-              </p>
-            )}
-            {nov.expense === 0 && nov.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Nov <span className="all-income">+{nov.income} </span>
-                <span className="all-expense">-{nov.expense}</span>
-              </p>
-            )}
-            {dec.expense === 0 && dec.expense === 0 ? (
-              <div></div>
-            ) : (
-              <p className="stat">
-                Dec <span className="all-income">+{dec.income} </span>
-                <span className="all-expense">-{dec.expense}</span>
+                Fiveth Week {month}{" "}
+                <span className="all-income">+{fiveW.income} </span>
+                <span className="all-expense">-{fiveW.expense}</span>
               </p>
             )}
           </div>
