@@ -50,7 +50,7 @@ export default function TransactionsDaily() {
             const day = tempSplit[0];
 
             const currentDate = new Date();
-            const currentDay = currentDate.getDate().toString();
+            const currentDay = "0" + currentDate.getDate().toString();
             const currentMonth = (currentDate.getMonth() + 1).toString();
             const currentYear = currentDate.getFullYear().toString();
             const currentTime = currentDate.getHours();
