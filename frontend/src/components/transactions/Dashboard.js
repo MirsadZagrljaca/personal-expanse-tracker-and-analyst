@@ -39,6 +39,13 @@ export default function Dashboard() {
         let i = 0;
         values.map((value, index) => {
           if (value.objectId._id == tempUser._id) {
+            if (value.currency === "$") {
+              value.amount *= 1.73;
+            } else if (value.currency === "€") {
+              value.amount *= 1.96;
+            }
+            value.currency = "BAM";
+
             response[i] = value;
             i++;
           }
@@ -121,7 +128,7 @@ export default function Dashboard() {
           setTotalIncome(tempInc);
           let tempExp = totalExpense * 1.69;
           setTotalExpense(tempExp);
-          setTotal(tempTotal);
+          setTotal(tempTotal.toFixed());
           setCurrency("BAM");
           tempData[index].amount *= 1.69;
           tempData[index].currency = "BAM";
@@ -190,11 +197,6 @@ export default function Dashboard() {
     setData(tempData);
   };
 
-  const chartData = [
-    { title: "Income", value: totalIncome, color: "green" },
-    { title: "Expenses", value: totalExpense, color: "red" },
-  ];
-
   const showAll = (e) => {
     setAll(true);
     setInc(false);
@@ -226,7 +228,6 @@ export default function Dashboard() {
               type="search"
               list="mylist"
               onChange={changeHandler}
-              defaultValue="BAM"
             />
             <datalist id="mylist">
               <option value="BAM" />
