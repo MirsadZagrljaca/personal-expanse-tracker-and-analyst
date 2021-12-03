@@ -228,6 +228,7 @@ export default function Dashboard() {
               type="search"
               list="mylist"
               onChange={changeHandler}
+              defaultValue="BAM"
             />
             <datalist id="mylist">
               <option value="BAM" />
